@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <meta charset="UTF-8">
+        <title>API FUN: AJAX</title>
+        <style>
+            body{
+                background-color: rgb(216, 189, 153);
+            }
+
+            h2{
+                text-align: center;
+            }
+        </style>
+
+        <script>
+            function getbrand() {
+                // make instance of request object ...
+                // ... to make HTTP request after page is loaded
+                request = new XMLHttpRequest();
+                console.log("1 - request object created");
+                // set the URL for the AJAX request to be the JSON file
+                request.open("GET", "https://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline", true)
+                console.log("2 - opened request file");
+
+                //set up event handler/callback
+                request.onreadystatechange = function() {
+                    console.log("3 - readystatechange event fired.");
+
+                    if (request.readyState == 4 && request.status == 200) {
+                        // wait for done + success 
+                        document.getElementById("messages").innerHTML = "Data retrieved! <br>";
+                        console.log("5:  data is ready");
+                        // gets the raw text from the JSON file 
+                        result = request.responseText;
+                        //returnHTML = result; // turns to HTML code 
+
+                        // convert to Javascript object (i.e array form)
+                        data = JSON.parse(result);
+
+                        // returnHTML += "<br>" + 
+                            //alert(data[0].name);
+                        // convert to Javascript script? do i need to?
+                        for (i =0; i<data.length; i++) {
+
+                                document.getElementById("messages").innerHTML += "Product Name: " + data[i].name + " || Price: " + 
+                                data[i].price + "<br>";
+
+                                console.log(data[i].name)
+                            
+                            
+                        }
+                        
+                        console.log("TESTIN:" + data[0].name)
+                        //document.getElementById("messages").innerHTML = data[0].name + " "+ data[0].price;
+                    }
+                    else if (request.readyState == 4 && request.status != 200) {
+                        document.getElementById("messages").innerHTML = "Whoops, something went terribly wrong!";
+                    }
+                    else if (request.readyState == 3) {
+                        console.log("6:  ready state 3- request received,data being sent");
+                        document.getElementById("messages").innerHTML = "Too soon!  Try again";
+                    }
+                }
+
+                // fire off the HTTP request 
+                request.send();
+                console.log("4 - Request sent");
+            }
+        </script>
+    </head>
+    <body onload=getbrand()>
+
+        <h1>JSON Data: Using AJAX Data Pattern</h1>
+	    <div id="messages">Loading...</div>
+        
+        <h2>API Results</h2>
+        <p>The API consists of different Maybelline products and the product information. The data is in JSON format. It indeed is free to use. </p>
+        <p>Website: https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/</p>
+        <p> There are two options used for the API request. One is using the AJAX data pattern and the other is usng fetch to complete the same API call. I have added them to different websites. 
+            Each has the title either API Fun AJAX or API Fun Fetch. 
+        </p>
+        <p>Applications where this API would be helpful: <br>
+            (1) If you are a beauty blogger it might be helpful, and if your selling those cosmetics it might be helpful to have access to this API <br>
+            (2) Also if are a makeup product owner and the prices of the products change, you can change it from the API. The API
+            makes it easy for owners to manage their products.
+        </p>
+    </body>
+
+</html>
